@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+    <TableLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableLayout1"
+        android:background="#cc007a">
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:background="@null">
+            <ImageButton
+                android:src="@android:drawable/ic_menu_gallery"
+                android:layout_column="0"
+                android:id="@+id/imageButton2"
+                android:background="#cc007a"
+                android:layout_gravity="bottom" />
+            <TextView
+                android:text="Rate And Comment"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/textView1"
+                android:layout_column="1"
+                android:textSize="67px"
+                android:background="#cc007a"
+                android:gravity="center"
+                android:layout_gravity="bottom" />
+                <TableRow />
+        </TableRow>
+    </TableLayout>
+
+      <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rating"
+                    android:isIndicator="false"
+                    android:stepSize="1.0"
+                    android:numStars="5"
+                    android:max="5"
+                    android:layout_gravity="center" />
+     <EditText
+        android:inputType="textMultiLine"
+        android:layout_width="match_parent"
+        android:hint="Rate The Wine"
+        android:layout_height="100dp"
+        android:id="@+id/txtReviewComments"
+        android:background="#ffffff"
+        android:textColor="@android:color/background_dark" />
+    <Button
+        android:text="Submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSubmitReview"
+        android:layout_gravity="right"
+        android:background="#cc007a" />
+</LinearLayout>
