@@ -34,14 +34,28 @@ namespace WineHangouts
 		}
 		public void ThankuYouAlert()
 		{
-			AlertDialog.Builder alert = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
-			LoggingClass.LogInfo("Successfully you logged in", screenid);
-			alert.SetTitle("Successfully you logged in");
-			alert.SetMessage("Thank You");
-			alert.SetNegativeButton("Ok", delegate { });
-			Dialog dialog = alert.Create();
-			dialog.Show();
-		}
+            AlertDialog.Builder aler = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
+            aler.SetTitle("Sorry");
+            aler.SetMessage("This Feature is available for VIP Users only");
+            aler.SetPositiveButton("Login", delegate
+            {
+                var intent = new Intent(this, typeof(LoginActivity));
+                StartActivity(intent);
+            });
+            aler.SetNegativeButton("KnowMore", delegate
+            {
+                var uri = Android.Net.Uri.Parse("https://hangoutz.azurewebsites.net/index.html");
+                var intent = new Intent(Intent.ActionView, uri);
+                StartActivity(intent);
+                
+            });
+            aler.SetNeutralButton("Cancel", delegate
+            {
+
+            });
+            Dialog dialog1 = aler.Create();
+            dialog1.Show();
+        }
 		public void IncorrectUserNameAlert()
 		{
 			AlertDialog.Builder aler = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);

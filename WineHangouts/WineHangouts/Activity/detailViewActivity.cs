@@ -25,158 +25,233 @@ namespace WineHangouts
 	public class DetailViewActivity : Activity, IPopupParent
 	{
         public RatingBar AvgRating;
+        public TextView WineName;
+        public TextView WineDescription;
+        public TextView Vintage;
+        public TextView WineProducer;
+        public TextView ErrorDescription;
         public ItemDetailsResponse myData;
-        public int sku;
+        public int sku; 
 		private int screenid = 4;
 		private int storeid = 0;
         public ListView commentsview;
-        //Button downloadButton;
         public reviewAdapter comments;
         WebClient webClient;
 		ImageView HighImageWine;
-		//ImageView imgWine;
 		public string WineBarcode;
-		//LinearLayout progressLayout;
-		//List<ItemDetails> DetailsArray;
 		List<Review> ReviewArray;
-
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
-			CheckInternetConnection();
+            AndHUD.Shared.Dismiss();
+            CheckInternetConnection();
 			Stopwatch st = new Stopwatch();
 			st.Start();
 			base.OnCreate(savedInstanceState);
-			SetContentView(Resource.Layout.detailedView);
-            WineBarcode = Intent.GetStringExtra("WineBarcode");
-			storeid = Intent.GetIntExtra("storeid", 1);
-			ActionBar.SetHomeButtonEnabled(true);
-			ActionBar.SetDisplayHomeAsUpEnabled(true);
-			ServiceWrapper svc = new ServiceWrapper();
-            myData = new ItemDetailsResponse();
-			ItemReviewResponse SkuRating = new ItemReviewResponse();
-			this.Title = "Wine Details";
+           
+            SetContentView(Resource.Layout.detailedView);
+   //         WineBarcode = Intent.GetStringExtra("WineBarcode");
+			//storeid = Intent.GetIntExtra("storeid", 1);
+			//ActionBar.SetHomeButtonEnabled(true);
+			//ActionBar.SetDisplayHomeAsUpEnabled(true);
+			//ServiceWrapper svc = new ServiceWrapper();
+   //         myData = new ItemDetailsResponse();
+			//ItemReviewResponse SkuRating = new ItemReviewResponse();
+			//this.Title = "Wine Details";
             commentsview = FindViewById<ListView>(Resource.Id.listView2);
-			TextView WineName = FindViewById<TextView>(Resource.Id.txtWineName); //Assigning values to respected Textfields
+			WineName = FindViewById<TextView>(Resource.Id.txtWineName); //Assigning values to respected Textfields
 			WineName.Focusable = false;
-			TextView WineProducer = FindViewById<TextView>(Resource.Id.txtProducer);
+			WineProducer = FindViewById<TextView>(Resource.Id.txtProducer);
 			WineProducer.Focusable = false;
-			TextView Vintage = FindViewById<TextView>(Resource.Id.txtVintage);
+			Vintage = FindViewById<TextView>(Resource.Id.txtVintage);
 			Vintage.Focusable = false;
-			TextView WineDescription = FindViewById<TextView>(Resource.Id.txtWineDescription);
+			 WineDescription = FindViewById<TextView>(Resource.Id.txtWineDescription);
 			WineDescription.Focusable = false;
             AvgRating = FindViewById<RatingBar>(Resource.Id.avgrating);
 			AvgRating.Focusable = false;
-			TextView ErrorDescription = FindViewById<TextView>(Resource.Id.Error);
+			ErrorDescription = FindViewById<TextView>(Resource.Id.Error);
 			ErrorDescription.Focusable = false;
-			ErrorDescription.Visibility = ViewStates.Invisible;
-			TableRow tr5 = FindViewById<TableRow>(Resource.Id.tableRow5);
-			try
-			{
-				DownloadAsync(this, System.EventArgs.Empty, WineBarcode);
-				myData = svc.GetItemDetails(WineBarcode, storeid).Result;
-				SkuRating = svc.GetItemReviewsByWineBarcode(WineBarcode).Result;
-				ReviewArray = SkuRating.Reviews.ToList();
-                comments = new reviewAdapter(this, ReviewArray);
-				if (comments.Count == 0)
-				{
-					ErrorDescription.Text = SkuRating.ErrorDescription;
-					ErrorDescription.Visibility = ViewStates.Visible;
-					//AlertDialog.Builder aler = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
-					//aler.SetTitle("No Reviews");
-					//aler.SetMessage("Be the first one to Review");
-					//aler.SetNegativeButton("Ok", delegate { });
+			ErrorDescription.Visibility = ViewStates.Gone;
+            TableRow tr5 = FindViewById<TableRow>(Resource.Id.tableRow5);
 
-					//Dialog dialog = aler.Create();
-					//dialog.Show();
+            Internal_ViewDidLoad();
+            //try
+            //{
+            //	DownloadAsync(this, System.EventArgs.Empty, WineBarcode);
+            //	myData = svc.GetItemDetails(WineBarcode, storeid).Result;
+            //	SkuRating = svc.GetItemReviewsByWineBarcode(WineBarcode).Result;
+            //	ReviewArray = SkuRating.Reviews.ToList();
+            //             comments = new reviewAdapter(this, ReviewArray);
+            //	if (comments.Count == 0)
+            //	{
+            //                 ErrorDescription.Visibility = ViewStates.Visible;
+            //                 ErrorDescription.Text = SkuRating.ErrorDescription;
+            //                 ErrorDescription.SetTextColor(Android.Graphics.Color.Black);
+            //             }
+            //	else
+            //             commentsview.Adapter = comments;
+            //	setListViewHeightBasedOnChildren1(commentsview);
+            //	WineName.Text = myData.ItemDetails.Name;
 
-				}
-				else
-                commentsview.Adapter = comments;
-				setListViewHeightBasedOnChildren1(commentsview);
-				WineName.Text = myData.ItemDetails.Name;
-				WineName.InputType = Android.Text.InputTypes.TextFlagNoSuggestions;
-				Vintage.Text = myData.ItemDetails.Vintage.ToString();
-                if (Vintage.Text == null || Vintage.Text == "0") { Vintage.Text = ""; } else { Vintage.Text = myData.ItemDetails.Vintage.ToString(); }
-                if (myData.ItemDetails.Producer == null || myData.ItemDetails.Producer == "")
-				{
-					WineProducer.Text = "Not Available";
-				}
-				else
-				{
-					WineProducer.Text = myData.ItemDetails.Producer;
-				}
-				if (myData.ItemDetails.Description == null || myData.ItemDetails.Description == "")
-				{
-					WineDescription.Text = "Not Available";
-				}
-				else
-				{
-					WineDescription.Text = myData.ItemDetails.Description;
-				}
-				AvgRating.Rating = (float)myData.ItemDetails.AverageRating;
-				Review edit = new Review()
-				{
-					Barcode= WineBarcode,
-					RatingText = "",
-					PlantFinal = storeid.ToString()
-				};
-				var tempReview = ReviewArray.Find(x => x.ReviewUserId == Convert.ToInt32(CurrentUser.getUserId()));
-				if (tempReview != null)
-					edit.RatingText = tempReview.RatingText;
-				ReviewPopup editPopup = new ReviewPopup(this, edit);
-				RatingBar RatingInput = FindViewById<RatingBar>(Resource.Id.ratingInput);//Taking rating stars input
-                   RatingInput.RatingBarChange += editPopup.CreatePopup;
-				var metrics = Resources.DisplayMetrics;
-				var widthInDp = ConvertPixelsToDp(metrics.WidthPixels);
-				var heightInDp = ConvertPixelsToDp(metrics.HeightPixels);
+            //             WineName.InputType = Android.Text.InputTypes.TextFlagNoSuggestions;
+            //	Vintage.Text = myData.ItemDetails.Vintage.ToString();
+            //             if (Vintage.Text == null || Vintage.Text == "0") { Vintage.Text = ""; } else { Vintage.Text = myData.ItemDetails.Vintage.ToString(); }
+            //             if (myData.ItemDetails.Producer == null || myData.ItemDetails.Producer == "")
+            //	{
+            //		WineProducer.Text = "Not Available";
+            //	}
+            //	else
+            //	{
+            //		WineProducer.Text = myData.ItemDetails.Producer;
+            //	}
+            //	if (myData.ItemDetails.Description == null || myData.ItemDetails.Description == "")
+            //	{
+            //		WineDescription.Text = "Not Available";
+            //	}
+            //	else
+            //	{
+            //		WineDescription.Text = myData.ItemDetails.Description;
+            //	}
+            //	AvgRating.Rating = (float)myData.ItemDetails.AverageRating;
+            //	Review edit = new Review()
+            //	{
+            //		Barcode= WineBarcode,
+            //		RatingText = "",
+            //		PlantFinal = storeid.ToString()
+            //	};
+            //	var tempReview = ReviewArray.Find(x => x.ReviewUserId == Convert.ToInt32(CurrentUser.getUserId()));
+            //	if (tempReview != null)
+            //		edit.RatingText = tempReview.RatingText;
+            //	ReviewPopup editPopup = new ReviewPopup(this, edit);
+            //	RatingBar RatingInput = FindViewById<RatingBar>(Resource.Id.ratingInput);//Taking rating stars input
+            //                RatingInput.RatingBarChange += editPopup.CreatePopup;
+            //	var metrics = Resources.DisplayMetrics;
+            //	var widthInDp = ConvertPixelsToDp(metrics.WidthPixels);
+            //	var heightInDp = ConvertPixelsToDp(metrics.HeightPixels);
 
 
-				HighImageWine = FindViewById<ImageView>(Resource.Id.WineImage);
+            //	HighImageWine = FindViewById<ImageView>(Resource.Id.WineImage);
 
-				BitmapFactory.Options options = new BitmapFactory.Options
-				{
-					InJustDecodeBounds = false,
-					OutHeight = 75,
-					OutWidth = 75
+            //	BitmapFactory.Options options = new BitmapFactory.Options
+            //	{
+            //		InJustDecodeBounds = false,
+            //		OutHeight = 75,
+            //		OutWidth = 75
 
-				};
-				ProgressIndicator.Hide();
-				LoggingClass.LogInfo("Entered into detail view" + WineBarcode, screenid);
-				Bitmap result = BitmapFactory.DecodeResource(Resources, Resource.Drawable.placeholder_re, options);
-			}
-			catch (Exception exe)
-			{
-				LoggingClass.LogError(exe.Message, screenid, exe.StackTrace.ToString());
-				AlertDialog.Builder alert = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
-				alert.SetTitle("Sorry");
-				alert.SetMessage("We're under maintainence");
-				alert.SetNegativeButton("Ok", delegate { });
-				Dialog dialog = alert.Create();
-				dialog.Show();
+            //	};
+            //	ProgressIndicator.Hide();
+            //	LoggingClass.LogInfo("Entered into detail view" + WineBarcode, screenid);
+            //	Bitmap result = BitmapFactory.DecodeResource(Resources, Resource.Drawable.placeholder_re, options);
+            //}
+            //catch (Exception exe)
+            //{
+            //	LoggingClass.LogError(exe.Message, screenid, exe.StackTrace.ToString());
+            //	AlertDialog.Builder alert = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
+            //	alert.SetTitle("Sorry");
+            //	alert.SetMessage("We're under maintainence");
+            //	alert.SetNegativeButton("Ok", delegate { });
+            //	Dialog dialog = alert.Create();
+            //	dialog.Show();
 
-			}
-			//downloadButton = FindViewById<Button>(Resource.Id.Download);
-			//try
-			//{
-			//    //downloadButton.Enabled = true;
-			//    downloadButton.Click += downloadAsync;
-			//    //downloadButton.Enabled = false;
-
-			//}
-
-			//catch (Exception e) { }
-			st.Stop();
+            //}
+            st.Stop();
+            AndHUD.Shared.Dismiss();
 			LoggingClass.LogTime("Detail activity", st.Elapsed.TotalSeconds.ToString());
 		}
+        public void Internal_ViewDidLoad()
+        {
+            try
+            {
+                WineBarcode = Intent.GetStringExtra("WineBarcode");
+                storeid = Intent.GetIntExtra("storeid", 1);
+                ActionBar.SetHomeButtonEnabled(true);
+                ActionBar.SetDisplayHomeAsUpEnabled(true);
+                ServiceWrapper svc = new ServiceWrapper();
+                myData = new ItemDetailsResponse();
+                ItemReviewResponse SkuRating = new ItemReviewResponse();
+                this.Title = "Wine Details";
+                try
+                {
+                    DownloadAsync(this, System.EventArgs.Empty, WineBarcode);
+                    myData = svc.GetItemDetails(WineBarcode, storeid).Result;
+                    SkuRating = svc.GetItemReviewsByWineBarcode(WineBarcode).Result;
+                    ReviewArray = SkuRating.Reviews.ToList();
+                    comments = new reviewAdapter(this, ReviewArray);
+                    if (comments.Count == 0)
+                    {
+                        ErrorDescription.Visibility = ViewStates.Visible;
+                        ErrorDescription.Text = SkuRating.ErrorDescription;
+                        ErrorDescription.SetTextColor(Android.Graphics.Color.Black);
+                    }
+                    else
+                        commentsview.Adapter = comments;
+                    setListViewHeightBasedOnChildren1(commentsview);
+                    WineName.Text = myData.ItemDetails.Name;
 
-		protected override void OnPause()
-		{
-			base.OnPause();
-			LoggingClass.LogInfo("OnPause state in Gridview activity--->" + storeid, screenid);
+                    WineName.InputType = Android.Text.InputTypes.TextFlagNoSuggestions;
+                    Vintage.Text = myData.ItemDetails.Vintage.ToString();
+                    if (Vintage.Text == null || Vintage.Text == "0") { Vintage.Text = ""; } else { Vintage.Text = myData.ItemDetails.Vintage.ToString(); }
+                    if (myData.ItemDetails.Producer == null || myData.ItemDetails.Producer == "")
+                    {
+                        WineProducer.Text = "Not Available";
+                    }
+                    else
+                    {
+                        WineProducer.Text = myData.ItemDetails.Producer;
+                    }
+                    if (myData.ItemDetails.Description == null || myData.ItemDetails.Description == "")
+                    {
+                        WineDescription.Text = "Not Available";
+                    }
+                    else
+                    {
+                        WineDescription.Text = myData.ItemDetails.Description;
+                    }
+                    AvgRating.Rating = (float)myData.ItemDetails.AverageRating;
+                    Review edit = new Review()
+                    {
+                        Barcode = WineBarcode,
+                        RatingText = "",
+                        PlantFinal = storeid.ToString()
+                    };
+                    var tempReview = ReviewArray.Find(x => x.ReviewUserId == Convert.ToInt32(CurrentUser.getUserId()));
+                    if (tempReview != null)
+                        edit.RatingText = tempReview.RatingText;
+                    ReviewPopup editPopup = new ReviewPopup(this, edit);
+                    RatingBar RatingInput = FindViewById<RatingBar>(Resource.Id.ratingInput);//Taking rating stars input
+                    RatingInput.RatingBarChange += editPopup.CreatePopup;
+                    var metrics = Resources.DisplayMetrics;
+                    var widthInDp = ConvertPixelsToDp(metrics.WidthPixels);
+                    var heightInDp = ConvertPixelsToDp(metrics.HeightPixels);
 
-		}
 
-		public bool CheckInternetConnection()
+                    HighImageWine = FindViewById<ImageView>(Resource.Id.WineImage);
+
+                    BitmapFactory.Options options = new BitmapFactory.Options
+                    {
+                        InJustDecodeBounds = false,
+                        OutHeight = 75,
+                        OutWidth = 75
+
+                    };
+                    ProgressIndicator.Hide();
+                    LoggingClass.LogInfo("Entered into detail view" + WineBarcode, screenid);
+                    Bitmap result = BitmapFactory.DecodeResource(Resources, Resource.Drawable.placeholder_re, options);
+                }
+                catch (Exception exe)
+                {
+                    LoggingClass.LogError(exe.Message, screenid, exe.StackTrace.ToString());
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
+                    alert.SetTitle("Sorry");
+                    alert.SetMessage("We're under maintainence");
+                    alert.SetNegativeButton("Ok", delegate { });
+                    Dialog dialog = alert.Create();
+                    dialog.Show();
+
+                }
+            }
+            catch { }
+        }
+        public bool CheckInternetConnection()
 		{
 
 			string CheckUrl = "http://google.com";
@@ -207,17 +282,12 @@ namespace WineHangouts
 				return false;
 			}
 		}
-
-		protected override void OnResume()
-		{
-			base.OnResume();
-			LoggingClass.LogInfo("OnResume state in Gridview activity--->" + storeid, screenid);
-		}
 		public override bool OnOptionsItemSelected(IMenuItem item)
 		{
 			if (item.ItemId == Android.Resource.Id.Home)
 			{
-				base.OnBackPressed();
+                AndHUD.Shared.Dismiss();
+                base.OnBackPressed();
                 AndHUD.Shared.Dismiss();
                 LoggingClass.LogInfo("Exited from Detail View", screenid);
 				//TokenModel devInfo = new TokenModel();
@@ -297,17 +367,18 @@ namespace WineHangouts
 		}
 		public void RefreshParent()
 		{
-          
-            ServiceWrapper svc = new ServiceWrapper();
-			//int wineid = Intent.GetIntExtra("WineID", 138);
-			ItemDetailsResponse myData = svc.GetItemDetails(WineBarcode, storeid).Result;
-            AvgRating.Rating = (float)myData.ItemDetails.AverageRating;
-            var SkuRating = svc.GetItemReviewsByWineBarcode(WineBarcode).Result;
-			comments = new reviewAdapter(this, SkuRating.Reviews.ToList());
-            commentsview.Adapter = comments;
-			comments.NotifyDataSetChanged();
-            
-         
+            Internal_ViewDidLoad();
+            ErrorDescription.Visibility = ViewStates.Gone; ;
+            //         ServiceWrapper svc = new ServiceWrapper();
+            ////int wineid = Intent.GetIntExtra("WineID", 138);
+            //ItemDetailsResponse myData = svc.GetItemDetails(WineBarcode, storeid).Result;
+            //         AvgRating.Rating = (float)myData.ItemDetails.AverageRating;
+            //         var SkuRating = svc.GetItemReviewsByWineBarcode(WineBarcode).Result;
+            //comments = new reviewAdapter(this, SkuRating.Reviews.ToList());
+            //         commentsview.Adapter = comments;
+            //comments.NotifyDataSetChanged();
+
+
         }
 
 		public async void DownloadAsync(object sender, System.EventArgs ea, string WineBarcode)

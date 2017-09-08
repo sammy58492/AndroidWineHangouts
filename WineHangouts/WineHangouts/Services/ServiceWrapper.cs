@@ -134,7 +134,7 @@ namespace WineHangouts
 				var cont = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
 				var response = await client.GetStringAsync(uri).ConfigureAwait(false);
 				output = JsonConvert.DeserializeObject<CustomerResponse>(response);
-				CurrentUser.GuestId = output.customer.CustomerID.ToString();
+				CurrentUser.SaveGuestId(output.customer.CustomerID.ToString());
 			}
 			catch (Exception ex)
 			{

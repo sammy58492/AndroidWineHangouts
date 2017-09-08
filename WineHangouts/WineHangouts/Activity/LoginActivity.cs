@@ -40,7 +40,7 @@ namespace WineHangouts
             Stopwatch st = new Stopwatch();
             st.Start();
             //for direct login
-            //CurrentUser.SaveUserName("Mohana Android","48732");
+           //CurrentUser.SaveUserName("Mohana Android","48732");
             //Preinfo("8902519310330");
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.login);
@@ -52,30 +52,39 @@ namespace WineHangouts
             ImageButton BtnScanner = FindViewById<ImageButton>(Resource.Id.btnScanner);
             Button BtnGuestLogin = FindViewById<Button>(Resource.Id.btnGuestLogin);
             LoggingClass.LogInfo("Opened the app", screenid);
-            BtnScanner.Click +=async delegate
+
+            BtnScanner.Click += async (sender, e) =>
             {
+
                 try
                 {
                     MobileBarcodeScanner.Initialize(Application);
                     var scanner = new ZXing.Mobile.MobileBarcodeScanner();
                     scanner.UseCustomOverlay = false;
-                    var result = await scanner.Scan();
-                    if (result.Text != null)
+                    var result ="8902519310330";//await scanner.Scan();
+                    if (result != null)
                     {
-                        LoggingClass.LogInfo("User Tried to login with " + result.Text, screenid);
-                        Preinfo("8902519310330");
-                        CurrentUser.SaveCardNumber(result.Text);
+                        LoggingClass.LogInfo("User Tried to login with " + result, screenid);
+                        Preinfo(result);
+                        CurrentUser.SaveCardNumber(result);
                     }
+
                 }
                 catch (Exception exe)
                 {
                     LoggingClass.LogError(exe.Message, screenid, exe.StackTrace);
                 }
+
+
+
             };
+
             BtnGuestLogin.Click += async delegate
             {
                 //await svc.InsertUpdateGuest(CurrentUser.getAuthToken());
-                CurrentUser.SaveUserName("Guest", null);
+                CurrentUser.SaveUserName("Guest", "0");
+                
+
                 Intent intent = new Intent(this, typeof(TabActivity));
                 ProgressIndicator.Show(this);
                 LoggingClass.LogInfo("User Tried to login with Guest Login ", screenid);
@@ -109,9 +118,12 @@ namespace WineHangouts
                     Preinfo(CurrentUser.GetCardNumber());
                 }
             }
-            else if (CurrentUser.getUserName() == "Guest")
+            else if (CurrentUser.GetGuestId()!=null|| CurrentUser.getUserId() == "0")
             {
-
+                Intent intent = new Intent(this, typeof(TabActivity));
+                ProgressIndicator.Show(this);
+                LoggingClass.LogInfo("User Tried to login with Guest Login ", screenid);
+                StartActivity(intent);
             }
             else
             {
@@ -154,64 +166,75 @@ namespace WineHangouts
         }
         public async void Preinfo(string CardNumber)
         {
-            AndHUD.Shared.Show(this, "Please Wait...", Convert.ToInt32(MaskType.Clear));
-            try
-            {
-                BtnLogin.Visibility = ViewStates.Invisible;
-                BtnResend.Visibility = ViewStates.Invisible;
-                AuthServ = await svc.AuthencateUser("test", CardNumber, CurrentUser.GetDeviceID());
-                LoggingClass.LogInfo("User Tried to login with " + CardNumber, screenid);
-                if (CardNumber != null)
+            int count = 0;
+           
+                AndHUD.Shared.Show(this, "Please Wait...", Convert.ToInt32(MaskType.Clear));
+                try
                 {
-                    CurrentUser.SaveCardNumber(CardNumber);
-                }
-                if (AuthServ != null)
-                {
-                    if (AuthServ.customer.Email != "" && AuthServ.customer.Email != null)
-                    {
-                        int Count = 0;
-                        TxtScanresult.Text = AuthServ.ErrorDescription;//" Hi " + authen.customer.FirstName + authen.customer.LastName + ",\n We have sent an email at  " + authen.customer.Email + ".\n Please verify email to continue login. \n If you have not received email Click Resend Email.\n To get Email Id changed, contact store.";
-                        TxtScanresult.SetTextColor(Android.Graphics.Color.Black);
-                        BtnContinue.Visibility = ViewStates.Visible;
-                        BtnUpdateEmail.Visibility = ViewStates.Visible;
-
-
-                        BtnContinue.Click += async delegate
-                        {
-                            AndHUD.Shared.Show(this, " Please Wait...", Convert.ToInt32(MaskType.Clear));
-                            AuthServ = await svc.ContinueService(AuthServ);
-                            ShowInfo(AuthServ);
-                            AndHUD.Shared.Dismiss();
-                        };
-                        BtnUpdateEmail.Click += delegate
-                        {
-                            BtnUpdateEmail_Click("please enter your new e-mail id.");
-                        };
-                    }
-                }
-                else
-                {
-                    TxtScanresult.Text = "Sorry. Your Card number is not matching our records.\n Please re-scan Or Try app as Guest Log In.";
-                    BtnResend.Visibility = ViewStates.Invisible;
                     BtnLogin.Visibility = ViewStates.Invisible;
-                    TxtScanresult.SetTextColor(Android.Graphics.Color.Red);
+                    BtnResend.Visibility = ViewStates.Invisible;
+                    AuthServ = await svc.AuthencateUser("test", CardNumber, CurrentUser.GetDeviceID());
+                    LoggingClass.LogInfo("User Tried to login with " + CardNumber, screenid);
+                    if (CardNumber != null)
+                    {
+                        CurrentUser.SaveCardNumber(CardNumber);
+                    }
+                    if (AuthServ != null)
+                    {
+                        if (AuthServ.customer.Email != "" && AuthServ.customer.Email != null)
+                        {
+                           
+                        int count1 = 0;
+                            TxtScanresult.Text = AuthServ.ErrorDescription;//" Hi " + authen.customer.FirstName + authen.customer.LastName + ",\n We have sent an email at  " + authen.customer.Email + ".\n Please verify email to continue login. \n If you have not received email Click Resend Email.\n To get Email Id changed, contact store.";
+                            TxtScanresult.SetTextColor(Android.Graphics.Color.Black);
+                            BtnContinue.Visibility = ViewStates.Visible;
+                            BtnUpdateEmail.Visibility = ViewStates.Visible;
+
+
+                            BtnContinue.Click += async delegate
+                            {
+                                if (count1 == 0)
+                                {
+                                    AndHUD.Shared.Show(this, " Please Wait...", Convert.ToInt32(MaskType.Clear));
+                                    count1 = 1;
+                                    AuthServ = await svc.ContinueService(AuthServ);
+                                    ShowInfo(AuthServ);
+                                    AndHUD.Shared.Dismiss();
+                                    
+                                }
+                            };
+                        count1 = 0;
+                            BtnUpdateEmail.Click += delegate
+                            {
+                                if(count==0)
+                                { 
+                                BtnUpdateEmail_Click("please enter your new e-mail id.");
+                                    count = 1;
+                                }
+                            };
+                        count = 0;
+                        }
+                    }
+                    else
+                    {
+                        TxtScanresult.Text = "Sorry. Your Card number is not matching our records.\n Please re-scan Or Try app as Guest Log In.";
+                        BtnResend.Visibility = ViewStates.Invisible;
+                        BtnLogin.Visibility = ViewStates.Invisible;
+                        TxtScanresult.SetTextColor(Android.Graphics.Color.Red);
+                        AndHUD.Shared.Dismiss();
+                    }
                     AndHUD.Shared.Dismiss();
                 }
-                AndHUD.Shared.Dismiss();
-            }
-            catch (Exception exe)
-            {
-
-            }
+                catch (Exception exe)
+                {
+                    
+                }
+           
         }
         private void BtnUpdateEmail_Click(string Message)
         {
             try
             {
-
-
-
-
                 AlertDialog.Builder aler = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
                 LoggingClass.LogInfo("Entered Incorrect Details", screenid);
                 aler.SetTitle(Message);
@@ -268,19 +291,11 @@ namespace WineHangouts
         public async void ShowInfo(CustomerResponse AuthServ)
         {
             int count = 0;
-            if (count == 0)
-            {
+            int cou = 0;
+          
                 AndHUD.Shared.Show(this, "Please Wait...", Convert.ToInt32(MaskType.Clear));
                 try
                 {
-                    //    AuthServ = await svc.AuthencateUser("test", Cardnumber, CurrentUser.GetDeviceID());
-                    //    LoggingClass.LogInfo("User Tried to login with " + Cardnumber , screenid);
-                    //if (Cardnumber != null)
-                    // { CurrentUser.SaveCardNumber(Cardnumber); }
-
-                    //    //if (authen.customer.CustomerID != 0)
-                    //if (AuthServ != null)
-                    //{
                     if (AuthServ.customer.Email != "" && AuthServ.customer.Email != null)
                     {
                         TxtScanresult.Text = AuthServ.ErrorDescription;// " Hi " + AuthServ.customer.FirstName + authen.customer.LastName + ",\n We have sent an email at  " + authen.customer.Email + ".\n Please verify email to continue login. \n If you have not received email Click Resend Email.\n To get Email Id changed, contact store.";
@@ -288,45 +303,45 @@ namespace WineHangouts
                         TxtScanresult.SetTextColor(Android.Graphics.Color.Black);
                         BtnResend.Visibility = ViewStates.Visible;
                         BtnLogin.Visibility = ViewStates.Visible;
-                        BtnContinue.Visibility = ViewStates.Invisible;
-                        BtnUpdateEmail.Visibility = ViewStates.Invisible;
+                        BtnContinue.Visibility = ViewStates.Gone;
+                        BtnUpdateEmail.Visibility = ViewStates.Gone;
                         BtnResend.Click += async delegate
                         {
                             try
                             {
-                                AndHUD.Shared.Show(this, "Sending verification email to " + AuthServ.customer.Email, Convert.ToInt32(MaskType.Clear));
-                                LoggingClass.LogInfo("Resend email " + AuthServ.customer.Email, screenid);
-                                await svc.ResendEMail(CurrentUser.GetCardNumber());
-                                AndHUD.Shared.ShowSuccess(this, "Sent", MaskType.Clear, TimeSpan.FromSeconds(2));
-                                AndHUD.Shared.Dismiss();
+                                if (count == 0)
+                                {
+                                    AndHUD.Shared.Show(this, "Sending verification email to " + AuthServ.customer.Email, Convert.ToInt32(MaskType.Clear));
+                                    count = 1;
+                                    LoggingClass.LogInfo("Resend email " + AuthServ.customer.Email, screenid);
+                                    await svc.ResendEMail(CurrentUser.GetCardNumber());
+                                    AndHUD.Shared.ShowSuccess(this, "Sent", MaskType.Clear, TimeSpan.FromSeconds(2));
+                                    AndHUD.Shared.Dismiss();
+                                    
+                                }
+
                             }
                             catch (Exception ex)
                             {
                             }
+
                         };
+                    count = 0;
                         BtnLogin.Click += delegate
                         {
-                            //ProgressIndicator.Show(this);
-
-                            LoggingClass.LogInfo("Clicked on Login " + AuthServ.customer.CardNumber, screenid);
-                            AndHUD.Shared.Show(this, "Checking Email Verification", Convert.ToInt32(MaskType.Clear));
-                            EmailVerification();
+                              LoggingClass.LogInfo("Clicked on Login " + AuthServ.customer.CardNumber, screenid);
+                               
+                                AndHUD.Shared.Show(this, "Checking Email Verification", Convert.ToInt32(MaskType.Clear));
+                                EmailVerification();
+                            
                         };
+                   
                     }
                     else
                     {
                         TxtScanresult.Text = AuthServ.ErrorDescription;
                         TxtScanresult.SetTextColor(Android.Graphics.Color.Red);
                     }
-                    //}
-                    //else
-                    //{
-                    //    TxtScanresult.Text = "Sorry. Your Card number is not matching our records.\n Please re-scan Or Try app as Guest Log In.";
-                    //    BtnResend.Visibility = ViewStates.Invisible;
-                    //    BtnLogin.Visibility = ViewStates.Invisible;
-                    //    TxtScanresult.SetTextColor(Android.Graphics.Color.Red);
-                    //    AndHUD.Shared.Dismiss();
-                    //}
                     AndHUD.Shared.Dismiss();
                 }
 
@@ -334,8 +349,7 @@ namespace WineHangouts
                 {
                     LoggingClass.LogError(ex.Message, screenid, ex.StackTrace);
                 }
-            }
-            count = 1;
+           
             AndHUD.Shared.Dismiss();
         }
         Boolean isValidEmail(String email)

@@ -128,9 +128,10 @@ namespace WineHangouts
             if (convertView == null)
             {
                
-                    heartImg.Click +=  delegate
+                    heartImg.Click += async
+                    delegate
                     {
-                        if (CurrentUser.getUserId() == null)
+                        if (CurrentUser.GetGuestId() != null|| CurrentUser.getUserId() == "0")
                         {
                             AlertDialog.Builder aler = new AlertDialog.Builder(myContext, Resource.Style.MyDialogTheme);
                             aler.SetTitle("Sorry");
@@ -168,7 +169,7 @@ namespace WineHangouts
                             like.BarCode = myItems[actualPosition].Barcode;
                             LoggingClass.LogInfo("Liked an item", screenid);
                             ServiceWrapper sw = new ServiceWrapper();
-                            //await sw.InsertUpdateLike(like);
+                            await sw.InsertUpdateLike(like);
                         }
                     };
                // }

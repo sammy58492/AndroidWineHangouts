@@ -25,7 +25,7 @@ namespace WineHangouts
         {
             if (userid == "0"||userid==null)
             {
-                userid =CurrentUser.GuestId;
+                userid =CurrentUser.GetGuestId();
                 if (userid == "0"|| userid == null)
                 {
                     userid = "DefaultLogs";

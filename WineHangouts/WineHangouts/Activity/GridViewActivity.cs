@@ -125,12 +125,13 @@ namespace WineHangouts
                 {
                     WineBarcode = myArr[args.Position].Barcode;
                     // ProgressIndicator.Show(this);
-                    AndHUD.Shared.Show(this, "Loading...", Convert.ToInt32(MaskType.Clear));
+                   AndHUD.Shared.Show(this, "Loading...", Convert.ToInt32(MaskType.Clear));
                     var intent = new Intent(this, typeof(DetailViewActivity));
                     LoggingClass.LogInfo("Clicked on " + myArr[args.Position].Barcode + " to enter into wine details",screenid);
                     intent.PutExtra("WineBarcode", WineBarcode);
                     intent.PutExtra("storeid", StoreId);
                     StartActivity(intent);
+                  
                 };
 				//TokenModel devInfo = new TokenModel();
 				//var activityManager = (ActivityManager)this.GetSystemService(Context.ActivityService);

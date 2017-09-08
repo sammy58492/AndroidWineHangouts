@@ -61,7 +61,7 @@
     <item>WY</item>
   </string-array>
   <string-array name="dropdown_array">
-    <item>--select--</item>
+    <item>--select your preferred store--</item>
     <item>Wall</item>
     <item>Point Pleasant</item>
     <item>All</item>

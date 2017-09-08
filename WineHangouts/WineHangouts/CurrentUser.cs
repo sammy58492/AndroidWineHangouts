@@ -102,8 +102,16 @@ namespace WineHangouts
 			return DeviceID;
 		}
        
-        public static string GuestId { get; set; }
-	}
+        public static void SaveGuestId(string GuestId) {
+            _edit.PutString("GuestId", GuestId);
+            _edit.Apply();
+        }
+        public static string GetGuestId()
+        {
+            string GuestId = _pref.GetString("GuestId", null);
+            return GuestId;
+        }
+    }
 
     public class ProgressIndicator
     {

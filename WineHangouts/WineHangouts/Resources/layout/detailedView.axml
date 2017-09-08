@@ -129,7 +129,7 @@
                     style="?android:attr/ratingBarStyleIndicator"
                     android:id="@+id/avgrating"
                     android:isIndicator="true"
-                    android:stepSize="1"
+                    android:stepSize="0.1"
                     android:numStars="5"
                     android:max="5"
                     android:scaleX="0.5"
@@ -141,8 +141,6 @@
                     android:transformPivotX="0dp"
                     android:transformPivotY="2dp"
                     android:translationX="45dp"
-                    android:backgroundTint="#00000000"
-                    android:rating="3"
                     android:clickable="false" />
             </TableRow>
             <TableRow
@@ -270,7 +268,6 @@
             </TableRow>
             <TableRow
                 android:id="@+id/tableRow8"
-                android:layout_margin="10px"
                 android:background="#800080">
                 <TextView
                     android:singleLine="false"
@@ -281,6 +278,16 @@
                     android:textStyle="bold"
                     android:textSize="30dp"
                     android:textColor="#FFFFFF" />
+            </TableRow>
+            <TableRow
+                android:id="@+id/tableRow8">
+                <TextView
+                    android:textStyle="bold"
+                    android:singleLine="false"
+                    android:id="@+id/Error"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/background_dark" />
             </TableRow>
         <!--<TableRow
                 android:id="@+id/tableRow9"
@@ -304,14 +311,6 @@
                     android:layout_width="match_parent" />
             <!--  android:divider="#FFCC00"
                     android:dividerHeight="4px"-->
-                <TextView
-                    android:textStyle="bold"
-                    android:singleLine="false"
-                    android:id="@+id/Error"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:text="Description Wine :"
-                    android:textColor="@android:color/background_dark" />
             </TableRow>
         </TableLayout>
     </LinearLayout>

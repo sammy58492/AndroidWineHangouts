@@ -33,7 +33,7 @@ namespace WineHangouts
                     string dir_path = pppd.CreateDirectoryForPictures();
                     dir_path = dir_path + "/" + Convert.ToInt32(CurrentUser.getUserId()) + ".jpg";
                     ProfileActivity pa = new ProfileActivity();
-                    Bitmap resized = pa.Resize(propic, 400, 400);
+                    Bitmap resized = pa.Resize(propic, 350, 350);
                     var filePath = System.IO.Path.Combine(dir_path);
                     var stream = new FileStream(filePath, FileMode.Create);
                     resized.Compress(Bitmap.CompressFormat.Jpeg, 100, stream);
@@ -70,17 +70,23 @@ namespace WineHangouts
         }
         public string GetRealPathFromURI(Uri contentURI)
         {
-            ICursor cursor = ContentResolver.Query(contentURI, null, null, null, null);
-            cursor.MoveToFirst();
-            string documentId = cursor.GetString(0);
-            documentId = documentId.Split(':')[1];
-            cursor.Close();
-            cursor = ContentResolver.Query(
-            Android.Provider.MediaStore.Images.Media.ExternalContentUri,
-            null, MediaStore.Images.Media.InterfaceConsts.Id + " = ? ", new[] { documentId }, null);
-            cursor.MoveToFirst();
-            string path = cursor.GetString(cursor.GetColumnIndex(MediaStore.Images.Media.InterfaceConsts.Data));
-            cursor.Close();
+            
+                ICursor cursor =  ManagedQuery(contentURI, null, null, null, null);
+                cursor.MoveToFirst();
+                string documentId = cursor.GetString(0);
+                if (documentId.Contains(":"))
+                {
+                    documentId = documentId.Split(':')[1];
+                }
+                cursor.Close();
+
+                cursor = ContentResolver.Query(
+                Android.Provider.MediaStore.Images.Media.ExternalContentUri,
+                null, MediaStore.Images.Media.InterfaceConsts.Id + " = ? ", new[] { documentId }, null);
+                cursor.MoveToFirst();
+                string path = cursor.GetString(cursor.GetColumnIndex(MediaStore.Images.Media.InterfaceConsts.Data));
+                cursor.Close();
+         
             return path;
         }
     }

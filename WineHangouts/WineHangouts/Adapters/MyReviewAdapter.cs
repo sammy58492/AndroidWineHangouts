@@ -140,7 +140,7 @@ namespace WineHangouts
                 txtDescription.Text = myItems[position].RatingText;
 
                 txtDate.Text = myItems[position].Date.ToString("yyyy/MM/dd");
-                rb.Rating = myItems[position].RatingStars;
+                rb.Rating = (float)myItems[position].RatingStars;
 
                 ProfilePicturePickDialog pppd = new ProfilePicturePickDialog();
                 string path = pppd.CreateDirectoryForPictures();

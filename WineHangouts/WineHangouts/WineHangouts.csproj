@@ -239,6 +239,9 @@
     <AndroidResource Include="Resources\layout\Tasting.axml" />
     <AndroidResource Include="Resources\layout\TastingListview.axml" />
     <AndroidResource Include="Resources\layout\WinePropertiesCell.axml" />
+    <AndroidResource Include="Resources\layout\RevEmp.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">

@@ -198,14 +198,31 @@ namespace WineHangouts
                         //Bottom.Text = "My Favorites";
                         //Bottom.SetTextColor(Color.White);
                         //Bottom.TextSize = 20;
-                        if (CurrentUser.getUserId() == null)
+                        if (CurrentUser.getUserId() == "0"||CurrentUser.GetGuestId()!=null)
 						{
 
 							AlertDialog.Builder aler = new AlertDialog.Builder(Activity,Resource.Style.MyDialogTheme);
 							aler.SetTitle("Sorry");
 							aler.SetMessage("This Feature is available for VIP Users only");
-							aler.SetNegativeButton("Ok", delegate { });
-							Dialog dialog1 = aler.Create();
+                            aler.SetPositiveButton("Login", delegate
+                            {
+                                var intent = new Intent(Activity, typeof(LoginActivity));
+                                StartActivity(intent);
+                            });
+                            aler.SetNegativeButton("KnowMore", delegate
+                            {
+                                var uri = Android.Net.Uri.Parse("https://hangoutz.azurewebsites.net/index.html");
+                                var intent = new Intent(Intent.ActionView, uri);
+                                StartActivity(intent);
+
+
+
+                            });
+                            aler.SetNeutralButton("Cancel", delegate
+                            {
+                               
+                            });
+                            Dialog dialog1 = aler.Create();
 							dialog1.Show();
 							Top.Click += (sender, e) => {
 								
