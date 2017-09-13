@@ -193,14 +193,14 @@ namespace WineHangouts
                         if (count == false)
                         {
                             heartImg.SetImageResource(Resource.Drawable.heart_full);
-                            LoggingClass.LogInfoEx("Liked an item------>" + myItems[position].Barcode, screenid);
+                         
                             x = true;
                             count = true;
                         }
                         else
                         {
                             heartImg.SetImageResource(Resource.Drawable.heart_empty);
-                            LoggingClass.LogInfoEx("UnLiked an item" + "----->" + myItems[position].Barcode, screenid);
+                           
                             x = false;
                             count = false;
                         }
@@ -210,7 +210,7 @@ namespace WineHangouts
                         like.Liked = x;
                             //myItems[actualPosition].IsLike = x;
                             like.BarCode = myItems[actualPosition].Barcode;
-                        LoggingClass.LogInfo("Liked an item", screenid);
+                      //  LoggingClass.LogInfo("Liked an item", screenid);
                         ServiceWrapper sw = new ServiceWrapper();
                         await sw.InsertUpdateLike(like);
                     };

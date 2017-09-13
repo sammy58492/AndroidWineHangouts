@@ -19,8 +19,10 @@ namespace WineHangouts
     {
         public int uid;
         private int screenid = 5;
+        public ImageView Imag;
         Context parent;
         public int x;
+        public TextView txtName;
         protected override void OnCreate(Bundle bundle)
         {
 			Stopwatch st = new Stopwatch();
@@ -41,9 +43,20 @@ namespace WineHangouts
 				int c = uidreviews.Reviews.Count;
 				if (c == 0)
 				{
+                    var data = svc.GetMyTastingsList(uid).Result;
+                  
+                   
                     SetContentView(Resource.Layout.ReviewEmpty);
-                    TextView txtName = FindViewById<TextView>(Resource.Id.textView1);
-                    ImageView Imag = FindViewById<ImageView>(Resource.Id.imageView1);
+                    txtName = FindViewById<TextView>(Resource.Id.textView1);
+                    if (data.TastingList.Count != 0)
+                    {
+                        txtName.Text = "You have tasted " + data.TastingList.Count + " wines.\n We would love to hear your feedback.";
+                    }
+                    else
+                    {
+                        txtName.Text = "Please taste and then review.";
+                    }
+                    Imag = FindViewById<ImageView>(Resource.Id.imageView1);
 				}
 				else
 				{
@@ -135,7 +148,13 @@ namespace WineHangouts
             ReviewPopup editPopup = new ReviewPopup(this, edit);
             MyReviewAdapter adapter = new MyReviewAdapter(this, uidreviews.Reviews.ToList());
             //adapter.Edit_Click += editPopup.EditPopup;
-
+            int c = uidreviews.Reviews.Count;
+            if (c == 0)
+            {
+                SetContentView(Resource.Layout.ReviewEmpty);
+                txtName = FindViewById<TextView>(Resource.Id.textView1);
+                Imag = FindViewById<ImageView>(Resource.Id.imageView1);
+            }
             wineList.Adapter = adapter;
             adapter.NotifyDataSetChanged();
         }

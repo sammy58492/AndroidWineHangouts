@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -209,18 +209,32 @@ namespace WineHangouts
         {
             if (item.ItemId == Android.Resource.Id.Home)
             {
-				// base.OnBackPressed();
-				var intent = new Intent(this, typeof(TabActivity));
-				LoggingClass.LogInfo("Clicked on options menu About", screenid);
-				StartActivity(intent);
-				LoggingClass.LogInfo("Exited from Gridview Activity",screenid);
+                base.OnBackPressed();
+              
+                var intent = new Intent(this, typeof(TabActivity));
+                LoggingClass.LogInfo("Clicked on options menu About", screenid);
+                StartActivity(intent);
+                LoggingClass.LogInfo("Exited from Gridview Activity",screenid);
 				TokenModel devInfo = new TokenModel();
 				var activityManager = (ActivityManager)this.GetSystemService(Context.ActivityService);
-				return false;
+				return true;
             }
             return base.OnOptionsItemSelected(item);
         }
-       
+
+        public async override void OnBackPressed()
+        {
+            var intent = new Intent(this, typeof(TabActivity));
+            LoggingClass.LogInfo("Clicked on options menu About", screenid);
+            StartActivity(intent);
+        }
+        //protected override bool OnBackButtonPressed()
+        //{
+        //    // By returning TRUE and not calling base we cancel the hardware back button :)
+        //    // base.OnBackButtonPressed();
+        //    return true;
+        //}
+
     }
     
 }

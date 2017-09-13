@@ -2,6 +2,14 @@ WineHangouts.AboutActivity, WineHangouts;md50912886b321ab5443c0818d74ee0a940.Abo
 WineHangouts.AboutActivity, WineHangouts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md50912886b321ab5443c0818d74ee0a940.AboutActivity
 WineHangouts.AboutActivity;md50912886b321ab5443c0818d74ee0a940.AboutActivity
 winehangouts.AboutActivity;md50912886b321ab5443c0818d74ee0a940.AboutActivity
+WineHangouts.Activity12, WineHangouts;md50912886b321ab5443c0818d74ee0a940.Activity12
+WineHangouts.Activity12, WineHangouts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md50912886b321ab5443c0818d74ee0a940.Activity12
+WineHangouts.Activity12;md50912886b321ab5443c0818d74ee0a940.Activity12
+winehangouts.Activity12;md50912886b321ab5443c0818d74ee0a940.Activity12
+WineHangouts.Activitylo, WineHangouts;md50912886b321ab5443c0818d74ee0a940.Activitylo
+WineHangouts.Activitylo, WineHangouts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md50912886b321ab5443c0818d74ee0a940.Activitylo
+WineHangouts.Activitylo;md50912886b321ab5443c0818d74ee0a940.Activitylo
+winehangouts.Activitylo;md50912886b321ab5443c0818d74ee0a940.Activitylo
 WineHangouts.AlertActivity, WineHangouts;md50912886b321ab5443c0818d74ee0a940.AlertActivity
 WineHangouts.AlertActivity, WineHangouts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md50912886b321ab5443c0818d74ee0a940.AlertActivity
 WineHangouts.AlertActivity;md50912886b321ab5443c0818d74ee0a940.AlertActivity
@@ -30,10 +38,18 @@ WineHangouts.LandscapeActivity, WineHangouts;md50912886b321ab5443c0818d74ee0a940
 WineHangouts.LandscapeActivity, WineHangouts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md50912886b321ab5443c0818d74ee0a940.LandscapeActivity
 WineHangouts.LandscapeActivity;md50912886b321ab5443c0818d74ee0a940.LandscapeActivity
 winehangouts.LandscapeActivity;md50912886b321ab5443c0818d74ee0a940.LandscapeActivity
+WineHangouts.Login, WineHangouts;md50912886b321ab5443c0818d74ee0a940.Login
+WineHangouts.Login, WineHangouts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md50912886b321ab5443c0818d74ee0a940.Login
+WineHangouts.Login;md50912886b321ab5443c0818d74ee0a940.Login
+winehangouts.Login;md50912886b321ab5443c0818d74ee0a940.Login
 WineHangouts.LoginActivity, WineHangouts;md50912886b321ab5443c0818d74ee0a940.LoginActivity
 WineHangouts.LoginActivity, WineHangouts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md50912886b321ab5443c0818d74ee0a940.LoginActivity
 WineHangouts.LoginActivity;md50912886b321ab5443c0818d74ee0a940.LoginActivity
 winehangouts.LoginActivity;md50912886b321ab5443c0818d74ee0a940.LoginActivity
+WineHangouts.MainActivity, WineHangouts;md50912886b321ab5443c0818d74ee0a940.MainActivity
+WineHangouts.MainActivity, WineHangouts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md50912886b321ab5443c0818d74ee0a940.MainActivity
+WineHangouts.MainActivity;md50912886b321ab5443c0818d74ee0a940.MainActivity
+winehangouts.MainActivity;md50912886b321ab5443c0818d74ee0a940.MainActivity
 WineHangouts.MyFavoriteAvtivity, WineHangouts;md50912886b321ab5443c0818d74ee0a940.MyFavoriteAvtivity
 WineHangouts.MyFavoriteAvtivity, WineHangouts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md50912886b321ab5443c0818d74ee0a940.MyFavoriteAvtivity
 WineHangouts.MyFavoriteAvtivity;md50912886b321ab5443c0818d74ee0a940.MyFavoriteAvtivity

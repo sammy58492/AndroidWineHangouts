@@ -12,6 +12,8 @@ using Hangout.Models;
 using Android.Widget;
 using Android.Graphics;
 using System.Net;
+using Android.Animation;
+using Android.Text;
 
 namespace WineHangouts
 {
@@ -67,14 +69,17 @@ namespace WineHangouts
             else
             {
                
-                    row = LayoutInflater.From(myContext).Inflate(Resource.Layout.CommentsCell, null, false);
+                    row = LayoutInflater.From(myContext).Inflate(Resource.Layout.Dummy, null, false);
                 TextView Name = row.FindViewById<TextView>(Resource.Id.textView64);
                 TextView Comments = row.FindViewById<TextView>(Resource.Id.textView66);
                 TextView date = row.FindViewById<TextView>(Resource.Id.textView67);
                 RatingBar rb = row.FindViewById<RatingBar>(Resource.Id.rtbProductRating);
-                ImageView Image = row.FindViewById<ImageView>(Resource.Id.imageButton2);
+                  
+                    ImageView Image = row.FindViewById<ImageView>(Resource.Id.imageButton2);
                 Image.SetScaleType(ImageView.ScaleType.CenterCrop);
-                Bitmap imageBitmap = BlobWrapper.ProfileImages(myItems[position].ReviewUserId);
+                    Button readmore = row.FindViewById<Button>(Resource.Id.btShowmore);
+                    readmore.Visibility = ViewStates.Gone;
+                    Bitmap imageBitmap = BlobWrapper.ProfileImages(myItems[position].ReviewUserId);
                 if (imageBitmap == null)
                 {
                     Image.SetImageResource(Resource.Drawable.ProfileEmpty);
@@ -113,20 +118,99 @@ namespace WineHangouts
                 Name.Text = myItems[position].Username;
                 Name.InputType = Android.Text.InputTypes.TextFlagNoSuggestions;
                 Comments.Text = myItems[position].RatingText;
-                date.Text = myItems[position].Date.ToString("yyyy/MM/dd");
+                    
+
+                    int counnt;
+
+                   counnt= myItems[position].RatingText.Length;// Length();
+                    myItems[position].RatingText.Contains('\n');
+                    int strcount=countofrepeatedchar(myItems[position].RatingText,'\n');
+
+
+                    date.Text = myItems[position].Date.ToString("yyyy/MM/dd");
                 rb.Rating = (float)myItems[position].RatingStars;
+                    if (strcount >= 3)
+                    {
 
-                //Image.SetImageBitmap(imageBitmap);
+                            readmore.Visibility = ViewStates.Visible;
+                            Comments.SetMaxLines(2);
+                            readmore.Click += (sender, e) =>
+                            {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(myContext, Resource.Style.MyDialogTheme);
+                               
+                                alert.SetMessage(myItems[position].RatingText);
+                                alert.SetNegativeButton("Ok", delegate {
+                                    readmore.Visibility = ViewStates.Visible;
+                                });
+                                Dialog dialog = alert.Create();
+                                dialog.Show();
+                            
+                               
+                               
+                            };
 
-              
+                        readmore.Visibility = ViewStates.Visible;
+                        //Image.SetImageBitmap(imageBitmap);
+
+                    }
+                    else
+                    {
+                        if (counnt >= 80)
+                        {
+
+                            readmore.Visibility = ViewStates.Visible;
+                            Comments.SetMaxLines(2);
+                            readmore.Click += (sender, e) =>
+                            {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(myContext, Resource.Style.MyDialogTheme);
+
+                                alert.SetMessage(myItems[position].RatingText);
+                                alert.SetNegativeButton("Ok", delegate {
+                                    readmore.Visibility = ViewStates.Visible;
+                                });
+                                Dialog dialog = alert.Create();
+                                dialog.Show();
+
+
+
+                            };
+
+                            readmore.Visibility = ViewStates.Visible;
+
+
+                        }
+                        else
+                        {
+                            readmore.Visibility = ViewStates.Gone;
+                            Comments.Text = myItems[position].RatingText;
+                        }
+                    }
 
             }
             return row;
         }
-			
-			
-		
 
 
-	}
+        public static int countofrepeatedchar(string inputstring, char ch)
+        {
+            char[] Inputstring = inputstring.ToCharArray();
+            char Ch = ch;
+            int result = 0;
+            int cntofchar = Inputstring.Length;
+            foreach (char chr in Inputstring)
+            {
+                if (chr == Ch)
+                {
+                    result++;
+                }
+
+            }
+
+
+            return result;
+        }
+
+
+    }
+
 }

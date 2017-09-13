@@ -125,6 +125,23 @@
                         android:layout_margin="2dp"
                         android:layout_width="230.0dp" />
                 </TableRow>
+                <TableRow
+                    android:id="@+id/tableRow90"
+                    android:minWidth="25px"
+                    android:minHeight="25px"
+                    android:paddingLeft="30px"
+                    android:layout_width="match_parent">
+                    <Button
+                        android:id="@+id/btShowmore"
+                        android:layout_width="wrap_content"
+                        android:text="Showmore..."
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/holo_blue_light"
+                        android:background="@android:color/transparent"
+                        android:layout_height="11.0dp"
+                        android:gravity="right"
+                        android:textSize="9dp" />
+                </TableRow>
             </TableLayout>
         </TableRow>
     <!--  <TableRow

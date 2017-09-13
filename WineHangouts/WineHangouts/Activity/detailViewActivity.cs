@@ -40,7 +40,9 @@ namespace WineHangouts
 		ImageView HighImageWine;
 		public string WineBarcode;
 		List<Review> ReviewArray;
-		protected override void OnCreate(Bundle savedInstanceState)
+        ReviewPopup editPopup;
+
+        protected override void OnCreate(Bundle savedInstanceState)
 		{
             AndHUD.Shared.Dismiss();
             CheckInternetConnection();
@@ -72,87 +74,26 @@ namespace WineHangouts
 			ErrorDescription.Focusable = false;
 			ErrorDescription.Visibility = ViewStates.Gone;
             TableRow tr5 = FindViewById<TableRow>(Resource.Id.tableRow5);
+            WineBarcode = Intent.GetStringExtra("WineBarcode");
+            storeid = Intent.GetIntExtra("storeid", 1);
+            Review edit = new Review()
+            {
+                Barcode = WineBarcode,
+                RatingText = "",
+                PlantFinal = storeid.ToString()
+            };
+            
+            ItemReviewResponse SkuRating = new ItemReviewResponse();
+            ServiceWrapper svc = new ServiceWrapper();
+            SkuRating = svc.GetItemReviewsByWineBarcode(WineBarcode).Result;
+            var tempReview = SkuRating.Reviews.ToList().Find(x => x.ReviewUserId == Convert.ToInt32(CurrentUser.getUserId()));
+            if (tempReview != null)
+                edit.RatingText = tempReview.RatingText;
+            editPopup = new ReviewPopup(this, edit);
+            RatingBar RatingInput = FindViewById<RatingBar>(Resource.Id.ratingInput);//Taking rating stars input
+            RatingInput.RatingBarChange += editPopup.CreatePopup;
 
             Internal_ViewDidLoad();
-            //try
-            //{
-            //	DownloadAsync(this, System.EventArgs.Empty, WineBarcode);
-            //	myData = svc.GetItemDetails(WineBarcode, storeid).Result;
-            //	SkuRating = svc.GetItemReviewsByWineBarcode(WineBarcode).Result;
-            //	ReviewArray = SkuRating.Reviews.ToList();
-            //             comments = new reviewAdapter(this, ReviewArray);
-            //	if (comments.Count == 0)
-            //	{
-            //                 ErrorDescription.Visibility = ViewStates.Visible;
-            //                 ErrorDescription.Text = SkuRating.ErrorDescription;
-            //                 ErrorDescription.SetTextColor(Android.Graphics.Color.Black);
-            //             }
-            //	else
-            //             commentsview.Adapter = comments;
-            //	setListViewHeightBasedOnChildren1(commentsview);
-            //	WineName.Text = myData.ItemDetails.Name;
-
-            //             WineName.InputType = Android.Text.InputTypes.TextFlagNoSuggestions;
-            //	Vintage.Text = myData.ItemDetails.Vintage.ToString();
-            //             if (Vintage.Text == null || Vintage.Text == "0") { Vintage.Text = ""; } else { Vintage.Text = myData.ItemDetails.Vintage.ToString(); }
-            //             if (myData.ItemDetails.Producer == null || myData.ItemDetails.Producer == "")
-            //	{
-            //		WineProducer.Text = "Not Available";
-            //	}
-            //	else
-            //	{
-            //		WineProducer.Text = myData.ItemDetails.Producer;
-            //	}
-            //	if (myData.ItemDetails.Description == null || myData.ItemDetails.Description == "")
-            //	{
-            //		WineDescription.Text = "Not Available";
-            //	}
-            //	else
-            //	{
-            //		WineDescription.Text = myData.ItemDetails.Description;
-            //	}
-            //	AvgRating.Rating = (float)myData.ItemDetails.AverageRating;
-            //	Review edit = new Review()
-            //	{
-            //		Barcode= WineBarcode,
-            //		RatingText = "",
-            //		PlantFinal = storeid.ToString()
-            //	};
-            //	var tempReview = ReviewArray.Find(x => x.ReviewUserId == Convert.ToInt32(CurrentUser.getUserId()));
-            //	if (tempReview != null)
-            //		edit.RatingText = tempReview.RatingText;
-            //	ReviewPopup editPopup = new ReviewPopup(this, edit);
-            //	RatingBar RatingInput = FindViewById<RatingBar>(Resource.Id.ratingInput);//Taking rating stars input
-            //                RatingInput.RatingBarChange += editPopup.CreatePopup;
-            //	var metrics = Resources.DisplayMetrics;
-            //	var widthInDp = ConvertPixelsToDp(metrics.WidthPixels);
-            //	var heightInDp = ConvertPixelsToDp(metrics.HeightPixels);
-
-
-            //	HighImageWine = FindViewById<ImageView>(Resource.Id.WineImage);
-
-            //	BitmapFactory.Options options = new BitmapFactory.Options
-            //	{
-            //		InJustDecodeBounds = false,
-            //		OutHeight = 75,
-            //		OutWidth = 75
-
-            //	};
-            //	ProgressIndicator.Hide();
-            //	LoggingClass.LogInfo("Entered into detail view" + WineBarcode, screenid);
-            //	Bitmap result = BitmapFactory.DecodeResource(Resources, Resource.Drawable.placeholder_re, options);
-            //}
-            //catch (Exception exe)
-            //{
-            //	LoggingClass.LogError(exe.Message, screenid, exe.StackTrace.ToString());
-            //	AlertDialog.Builder alert = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
-            //	alert.SetTitle("Sorry");
-            //	alert.SetMessage("We're under maintainence");
-            //	alert.SetNegativeButton("Ok", delegate { });
-            //	Dialog dialog = alert.Create();
-            //	dialog.Show();
-
-            //}
             st.Stop();
             AndHUD.Shared.Dismiss();
 			LoggingClass.LogTime("Detail activity", st.Elapsed.TotalSeconds.ToString());
@@ -175,6 +116,9 @@ namespace WineHangouts
                     myData = svc.GetItemDetails(WineBarcode, storeid).Result;
                     SkuRating = svc.GetItemReviewsByWineBarcode(WineBarcode).Result;
                     ReviewArray = SkuRating.Reviews.ToList();
+                    var tempReview = SkuRating.Reviews.ToList().Find(x => x.ReviewUserId == Convert.ToInt32(CurrentUser.getUserId()));
+                    if (tempReview != null)
+                        editPopup._editObj.RatingText = tempReview.RatingText;
                     comments = new reviewAdapter(this, ReviewArray);
                     if (comments.Count == 0)
                     {
@@ -207,18 +151,11 @@ namespace WineHangouts
                         WineDescription.Text = myData.ItemDetails.Description;
                     }
                     AvgRating.Rating = (float)myData.ItemDetails.AverageRating;
-                    Review edit = new Review()
-                    {
-                        Barcode = WineBarcode,
-                        RatingText = "",
-                        PlantFinal = storeid.ToString()
-                    };
-                    var tempReview = ReviewArray.Find(x => x.ReviewUserId == Convert.ToInt32(CurrentUser.getUserId()));
-                    if (tempReview != null)
-                        edit.RatingText = tempReview.RatingText;
-                    ReviewPopup editPopup = new ReviewPopup(this, edit);
-                    RatingBar RatingInput = FindViewById<RatingBar>(Resource.Id.ratingInput);//Taking rating stars input
-                    RatingInput.RatingBarChange += editPopup.CreatePopup;
+
+                    //ReviewPopup editPopup = new ReviewPopup(this, edit);
+                    //RatingBar RatingInput = FindViewById<RatingBar>(Resource.Id.ratingInput);//Taking rating stars input
+                    //RatingInput.RatingBarChange += editPopup.CreatePopup;
+
                     var metrics = Resources.DisplayMetrics;
                     var widthInDp = ConvertPixelsToDp(metrics.WidthPixels);
                     var heightInDp = ConvertPixelsToDp(metrics.HeightPixels);
@@ -416,7 +353,11 @@ namespace WineHangouts
 				//downloadButton.Text = "Download Image";
 				Bitmap imgWine = BlobWrapper.Bottleimages(WineBarcode, storeid);
 				HighImageWine.SetImageBitmap(imgWine);
-				return;
+                if (imgWine == null)
+                {
+                    HighImageWine.SetImageResource(Resource.Drawable.bottle);
+                }
+                return;
 			}
 
 			try

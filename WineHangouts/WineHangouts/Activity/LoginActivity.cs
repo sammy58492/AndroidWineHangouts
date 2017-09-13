@@ -53,7 +53,7 @@ namespace WineHangouts
             Button BtnGuestLogin = FindViewById<Button>(Resource.Id.btnGuestLogin);
             LoggingClass.LogInfo("Opened the app", screenid);
 
-            BtnScanner.Click += async (sender, e) =>
+            BtnScanner.Click += async delegate
             {
 
                 try
@@ -61,12 +61,12 @@ namespace WineHangouts
                     MobileBarcodeScanner.Initialize(Application);
                     var scanner = new ZXing.Mobile.MobileBarcodeScanner();
                     scanner.UseCustomOverlay = false;
-                    var result ="8902519310330";//await scanner.Scan();
-                    if (result != null)
+                    var result = await scanner.Scan();//"8902519310330";//await scanner.Scan();
+                    if (result.Text != null)
                     {
                         LoggingClass.LogInfo("User Tried to login with " + result, screenid);
-                        Preinfo(result);
-                        CurrentUser.SaveCardNumber(result);
+                        Preinfo(result.Text);
+                        CurrentUser.SaveCardNumber(result.Text);
                     }
 
                 }
@@ -74,9 +74,7 @@ namespace WineHangouts
                 {
                     LoggingClass.LogError(exe.Message, screenid, exe.StackTrace);
                 }
-
-
-
+                BtnScanner.Click -= null;
             };
 
             BtnGuestLogin.Click += async delegate
@@ -214,9 +212,15 @@ namespace WineHangouts
                             };
                         count = 0;
                         }
+                             else
+                             {
+                        
+                        BtnUpdateEmail_Click(AuthServ.ErrorDescription);
+                             }
                     }
                     else
                     {
+
                         TxtScanresult.Text = "Sorry. Your Card number is not matching our records.\n Please re-scan Or Try app as Guest Log In.";
                         BtnResend.Visibility = ViewStates.Invisible;
                         BtnLogin.Visibility = ViewStates.Invisible;
@@ -238,6 +242,7 @@ namespace WineHangouts
                 AlertDialog.Builder aler = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
                 LoggingClass.LogInfo("Entered Incorrect Details", screenid);
                 aler.SetTitle(Message);
+                
                 EditText txtEmail = new EditText(this);
                 txtEmail.SetTextColor(Color.Black);
                 txtEmail.FocusableInTouchMode = true;

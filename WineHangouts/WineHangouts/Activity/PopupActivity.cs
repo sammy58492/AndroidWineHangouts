@@ -22,7 +22,7 @@ namespace WineHangouts
         Context Parent;
         private string WineBarcode;
         private int ParentScreenId=17;
-        Review _editObj;
+        public Review _editObj;
         string storeid;
         public ReviewPopup(Context parent, Review EditObj)
         {
@@ -73,7 +73,8 @@ namespace WineHangouts
                 close.SetScaleType(ImageView.ScaleType.CenterCrop);
                 editDialog.Window.SetBackgroundDrawable(new Android.Graphics.Drawables.ColorDrawable(Android.Graphics.Color.Transparent));
                 editDialog.Show();
-                LoggingClass.LogInfo("Entered into CreatePopup", screenid);
+                    editDialog.SetCanceledOnTouchOutside(false);
+                    LoggingClass.LogInfo("Entered into CreatePopup", screenid);
                    
                     close.Click += delegate
                 {
@@ -83,7 +84,7 @@ namespace WineHangouts
                 btnSubmitReview.Click += async delegate
                 {
                         AndHUD.Shared.Show(Parent, "Saving Review...", Convert.ToInt32(MaskType.Clear));
-                        ProgressIndicator.Show(Parent);
+                      //  ProgressIndicator.Show(Parent);
                         review.ReviewDate = DateTime.Now;
 						review.ReviewUserId = Convert.ToInt32(CurrentUser.getUserId());
 						review.Username = CurrentUser.getUserName();

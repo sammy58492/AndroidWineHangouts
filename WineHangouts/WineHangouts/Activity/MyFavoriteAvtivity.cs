@@ -44,14 +44,7 @@ namespace WineHangouts
                     SetContentView(Resource.Layout.FavEmp);
                     TextView txtName = FindViewById<TextView>(Resource.Id.textView1);
                     ImageView Imag = FindViewById<ImageView>(Resource.Id.imageView1);
-                    //AlertDialog.Builder aler = new AlertDialog.Builder(this, Resource.Style.MyDialogTheme);
-                    ////aler.SetTitle("No Reviews Avalilable");
-                    //aler.SetMessage("Sorry you didn't tell us your Favourite wines");
-                    //LoggingClass.LogInfo("Sorry you didn't tell us your Favourite wines", screenid);
-                    //aler.SetNegativeButton("Ok", delegate { Finish(); });
-                    //LoggingClass.LogInfo("Clicked on Secaucus", screenid);
-                    //Dialog dialog = aler.Create();
-                    //dialog.Show();
+                   
                 }
 				else
 				{

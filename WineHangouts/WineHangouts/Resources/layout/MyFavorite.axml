@@ -17,21 +17,31 @@
         <TableRow
             android:id="@+id/tableRow1"
             android:background="#ffffff">
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#ffffff">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minWidth="25px"
+                android:minHeight="25px">
                 <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="200.0dp"
+                    android:id="@+id/imageView1"
+                    android:background="#ffffff" />
+                <ImageView
+                    android:layout_width="107.5dp"
+                    android:layout_height="218.0dp"
                     android:id="@+id/imgWine"
-                    android:scaleType="center" />
+                    android:layout_centerHorizontal="true" />
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:id="@+id/imgHeart" />
-            </FrameLayout>
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:id="@+id/imgHeart"
+                    android:background="@drawable/Heart_empty"
+                    android:scaleType="fitXY"
+                    android:layout_margin="3dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_alignEnd="@id/imageView1" />
+            </RelativeLayout>
         </TableRow>
     </TableLayout>
     <TableLayout
@@ -68,7 +78,7 @@
         <TableRow
             android:id="@+id/tableRow1"
             android:background="#ffffff"
-            android:layout_height="22.0dp">
+            android:layout_height="14.0dp">
             <View
                 android:id="@+id/topDivider"
                 android:layout_weight="1"
@@ -79,7 +89,7 @@
                 android:layout_marginLeft="8dp" />
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="22.5dp"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Vintage"
                 android:layout_weight="1"
@@ -87,7 +97,7 @@
                 android:id="@+id/txtVintage"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="7.0dp" />
             <View
                 android:id="@+id/topDivider"
                 android:layout_weight="1"

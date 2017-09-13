@@ -22,17 +22,21 @@
     </receiver>
     <service android:name="com.appsee.AppseeBackgroundUploader" />
     <activity android:label="About Us" android:screenOrientation="portrait" android:name="md50912886b321ab5443c0818d74ee0a940.AboutActivity" />
+    <activity android:label="Activity12" android:name="md50912886b321ab5443c0818d74ee0a940.Activity12" />
+    <activity android:label="Activitylo" android:name="md50912886b321ab5443c0818d74ee0a940.Activitylo" />
     <activity android:label="Alert" android:name="md50912886b321ab5443c0818d74ee0a940.AlertActivity" />
     <activity android:icon="@drawable/logo5" android:label="Search Helper" android:screenOrientation="portrait" android:name="md50912886b321ab5443c0818d74ee0a940.AutoCompleteTextActivity" />
     <activity android:icon="@drawable/logo5" android:label="Wine Details" android:screenOrientation="portrait" android:name="md50912886b321ab5443c0818d74ee0a940.DetailViewActivity" />
     <activity android:label="Available Wines" android:screenOrientation="portrait" android:name="md50912886b321ab5443c0818d74ee0a940.GridViewActivity" />
     <activity android:label="EnoMachine Bottles" android:name="md50912886b321ab5443c0818d74ee0a940.LandscapeActivity" />
+    <activity android:label="WineHangouts" android:name="md50912886b321ab5443c0818d74ee0a940.Login" />
     <activity android:icon="@drawable/logo5" android:label="@string/ApplicationName" android:screenOrientation="portrait" android:name="md50912886b321ab5443c0818d74ee0a940.LoginActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+    <activity android:icon="@drawable/icon" android:label="WineHangouts" android:noHistory="true" android:theme="@style/Theme.Splash" android:name="md50912886b321ab5443c0818d74ee0a940.MainActivity" />
     <activity android:label="My Favorites" android:screenOrientation="portrait" android:name="md50912886b321ab5443c0818d74ee0a940.MyFavoriteAvtivity" />
     <activity android:label="My Reviews" android:screenOrientation="portrait" android:name="md50912886b321ab5443c0818d74ee0a940.MyReviewActivity" />
     <activity android:label="My Tastings" android:screenOrientation="portrait" android:name="md50912886b321ab5443c0818d74ee0a940.MyTastingActivity" />

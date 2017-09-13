@@ -25,10 +25,13 @@ namespace WineHangouts
             LoggingClass.LogInfo("Entered into ProfilePictureGallery", screenid);
             if (resultCode == Result.Ok)
             {
-                string Path = GetRealPathFromURI(data.Data);
+                // string Path = GetRealPathFromURI(data.Data);
+                var uri = data.Data;
+                var path = GetPathToImage(uri);
+                GrantUriPermission(null,uri,0);
                 try
                 {
-                    Bitmap propic = BitmapFactory.DecodeFile(Path);
+                    Bitmap propic = BitmapFactory.DecodeFile(path);
                     ProfilePicturePickDialog pppd = new ProfilePicturePickDialog();
                     string dir_path = pppd.CreateDirectoryForPictures();
                     dir_path = dir_path + "/" + Convert.ToInt32(CurrentUser.getUserId()) + ".jpg";
@@ -87,6 +90,29 @@ namespace WineHangouts
                 string path = cursor.GetString(cursor.GetColumnIndex(MediaStore.Images.Media.InterfaceConsts.Data));
                 cursor.Close();
          
+            return path;
+        }
+        private string GetPathToImage(Android.Net.Uri uri)
+        {
+            string doc_id = "";
+            using (var c1 = ContentResolver.Query(uri, null, null, null, null))
+            {
+                c1.MoveToFirst();
+                string document_id = c1.GetString(0);
+                doc_id = document_id.Substring(document_id.LastIndexOf(":") + 1);
+            }
+
+            string path = null;
+
+            // The projection contains the columns we want to return in our query.
+            string selection = Android.Provider.MediaStore.Images.Media.InterfaceConsts.Id + " =? ";
+            using (var cursor = ContentResolver.Query(Android.Provider.MediaStore.Images.Media.ExternalContentUri, null, selection, new string[] { doc_id }, null))
+            {
+                if (cursor == null) return path;
+                var columnIndex = cursor.GetColumnIndexOrThrow(Android.Provider.MediaStore.Images.Media.InterfaceConsts.Data);
+                cursor.MoveToFirst();
+                path = cursor.GetString(columnIndex);
+            }
             return path;
         }
     }
